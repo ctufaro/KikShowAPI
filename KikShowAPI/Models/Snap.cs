@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KikShowAPI.Interfaces
+namespace KikShowAPI.Models
 {
-    public interface IGifFile
+    public class Snap
     {
-        string FileName { get; set; }
+        public string FileName { get; set; }
     }
 }
