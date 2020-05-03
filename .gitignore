@@ -6,7 +6,6 @@
 # Azure Functions localsettings file
 local.settings.json
 Config.cs
-BaseDAL.cs
 
 # User-specific files
 *.rsuser

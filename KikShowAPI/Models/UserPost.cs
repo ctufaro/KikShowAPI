@@ -11,14 +11,30 @@ namespace KikShowAPI.Models
 {
     public class UserPost //: IFromDataReader<UserPost>
     {
+        private string _postMotion;
+        private string _postImage;
+        private string _userAvatar;
+
         public int PostId { get; set; }
-        public string PostTitle { get; set; }
-        public string PostMotion { get; set; }
-        public string PostImage { get; set; }
+        public string PostTitle { get; set; }        
+        public string PostMotion 
+        {
+            get { return Config.BlobUrl + _postMotion; }
+            set { _postMotion = value; }
+        }
+        public string PostImage
+        {
+            get { return Config.BlobUrl + _postImage; }
+            set { _postImage = value; }
+        }
         public DateTime PostDate { get; set; }
         public int UserId { get; set; }
         public string UserName { get; set; }
-        public string UserAvatar { get; set; }
+        public string UserAvatar
+        {
+            get { return Config.BlobUrl + _userAvatar; }
+            set { _userAvatar = value; }
+        }
 
         public UserPost()
         {
