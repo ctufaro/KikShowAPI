@@ -20,12 +20,7 @@ namespace KikShowAPI.Controllers
             string name = userSpin.Name;
             var video = userSpin.Video;
             if (video.Length > 0)
-            {
-                //using (var fileStream = new FileStream(@"C:\Temp\Spins\"+video.FileName, FileMode.Create))
-                //{
-                //    await video.CopyToAsync(fileStream);
-                //}               
-
+            {        
                 Storage storage = new Storage();
                 using (var stream = video.OpenReadStream())
                 {

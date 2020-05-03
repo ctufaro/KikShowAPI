@@ -1,0 +1,50 @@
+﻿using KikShowAPI.DAL;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace KikShowAPI.Models
+{
+    public class UserPost //: IFromDataReader<UserPost>
+    {
+        public int PostId { get; set; }
+        public string PostTitle { get; set; }
+        public string PostMotion { get; set; }
+        public string PostImage { get; set; }
+        public DateTime PostDate { get; set; }
+        public int UserId { get; set; }
+        public string UserName { get; set; }
+        public string UserAvatar { get; set; }
+
+        public UserPost()
+        {
+
+        }
+
+        public async Task<List<UserPost>> SelectUserPostsAsync()
+        {
+            await Task.Delay(1);
+            BaseDAL baseDAL = new BaseDAL();
+            List<UserPost> userPosts = new List<UserPost>();
+            DataTable dt = baseDAL.GetDataTable("SelectUserPosts", null);            
+            foreach(DataRow dr in dt.Rows)
+            {
+                UserPost post = new UserPost();
+                post.PostId = Convert.ToInt32(dr["PostId"]);
+                post.PostTitle = dr["PostTitle"] is DBNull ? null : dr["PostTitle"].ToString();
+                post.PostMotion = dr["PostMotion"] is DBNull ? null : dr["PostMotion"].ToString();
+                post.PostImage = dr["PostImage"] is DBNull ? null : dr["PostImage"].ToString();
+                post.PostDate = dr["PostDate"] is DBNull ? new DateTime() : Convert.ToDateTime(dr["PostDate"]);
+                post.UserId = dr["UserId"] is DBNull ? 0 : Convert.ToInt32(dr["UserId"]);
+                post.UserName = dr["UserName"] is DBNull ? null : dr["UserName"].ToString();
+                post.UserAvatar = dr["UserAvatar"] is DBNull ? null : dr["UserAvatar"].ToString();
+                userPosts.Add(post);
+            }
+            return userPosts;
+        }        
+    }
+}
