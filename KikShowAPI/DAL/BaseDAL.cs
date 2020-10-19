@@ -57,16 +57,16 @@ namespace KikShowAPI.DAL
             });
         }
 
-        public static int ExecuteQuery(string connectionstring, string storedProcedure, List<SqlParameter> prm)
+        public async Task<int> ExecuteQueryAsync(string storedProcedure, List<SqlParameter> prm)
         {
-            using (var con = new SqlConnection(connectionstring))
+            using (var con = new SqlConnection(_connectionString))
             {
                 using (var cmd = new SqlCommand(storedProcedure, con))
                 {
                     con.Open();
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddRange(prm.ToArray());
-                    return cmd.ExecuteNonQuery();
+                    return await cmd.ExecuteNonQueryAsync();
                 }
             }
         }

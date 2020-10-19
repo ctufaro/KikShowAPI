@@ -15,7 +15,7 @@ namespace KikShowAPI.Models
         private string _postImage;
         private string _userAvatar;
 
-        public int PostId { get; set; }
+        public int Id { get; set; }
         public string PostTitle { get; set; }        
         public string PostMotion 
         {
@@ -50,7 +50,7 @@ namespace KikShowAPI.Models
             foreach(DataRow dr in dt.Rows)
             {
                 UserPost post = new UserPost();
-                post.PostId = Convert.ToInt32(dr["PostId"]);
+                post.Id = Convert.ToInt32(dr["PostId"]);
                 post.PostTitle = dr["PostTitle"] is DBNull ? null : dr["PostTitle"].ToString();
                 post.PostMotion = dr["PostMotion"] is DBNull ? null : dr["PostMotion"].ToString();
                 post.PostImage = dr["PostImage"] is DBNull ? null : dr["PostImage"].ToString();
@@ -61,6 +61,18 @@ namespace KikShowAPI.Models
                 userPosts.Add(post);
             }
             return userPosts;
-        }        
+        }
+
+        public async Task InsertUserPostAsync(UserPostData userPD)
+        {
+            await Task.Delay(1);
+            BaseDAL baseDAL = new BaseDAL();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@USERID", userPD.UserId));
+            parameters.Add(new SqlParameter("@TITLE", userPD.Title));
+            parameters.Add(new SqlParameter("@MOTION", userPD.Motion.FileName));
+            parameters.Add(new SqlParameter("@IMAGE", userPD.Image.FileName));
+            await baseDAL.ExecuteQueryAsync("InsertUserPost", parameters);
+        }
     }
 }

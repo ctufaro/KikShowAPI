@@ -30,29 +30,33 @@ namespace KikShowAPI.Controllers
         [HttpPost]
         public async Task<ObjectResult> Post([FromForm]UserPostData userPD)
         {
-            int userId = userPD.UserId;
-            string title = userPD.Title;
-            var motion = userPD.Motion;
-            var image = userPD.Image;
-            if (motion.Length > 0)
+            if (userPD.Motion.Length > 0)
             {
                 Storage storage = new Storage();
-                using (var stream = motion.OpenReadStream())
+                using (var stream = userPD.Motion.OpenReadStream())
                 {
                     //uploading motion to azure
-                    await storage.UploadToStorage(stream, motion.FileName);
+                    await storage.UploadToStorage(stream, userPD.Motion.FileName);
                 }
             }
-            if (image.Length > 0)
+            if (userPD.Image.Length > 0)
             {
                 Storage storage = new Storage();
-                using (var stream = image.OpenReadStream())
+                using (var stream = userPD.Image.OpenReadStream())
                 {
                     //uploading motion to azure
-                    await storage.UploadToStorage(stream, image.FileName);
+                    await storage.UploadToStorage(stream, userPD.Image.FileName);
                 }
             }
-            return Ok(new { status = true, message = "User Video Posted Successfully!!" });
+            try
+            {
+                await new UserPost().InsertUserPostAsync(userPD);
+                return Ok(new { status = true, message = "User Posted Successfully!!" });
+            }
+            catch(Exception e)
+            {
+                return NotFound(new { status = false, message = $"WebAPI error:{e.ToString()}" });
+            }
         }
 
 
